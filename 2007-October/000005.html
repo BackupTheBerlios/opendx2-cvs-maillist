@@ -1,0 +1,105 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [OpenDX2-cvs] dxsamples/supervise/complexdemo/interactors	module_make.in, 1.1, 1.2
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/opendx2-cvs/2007-October/index.html" >
+   <LINK REL="made" HREF="mailto:opendx2-cvs%40lists.berlios.de?Subject=Re%3A%20%5BOpenDX2-cvs%5D%20dxsamples/supervise/complexdemo/interactors%0A%09module_make.in%2C%201.1%2C%201.2&In-Reply-To=%3C20071024052632.78D6D1103A4%40mail.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000004.html">
+   <LINK REL="Next"  HREF="000006.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[OpenDX2-cvs] dxsamples/supervise/complexdemo/interactors	module_make.in, 1.1, 1.2</H1>
+    <B>dthompsn</B> 
+    <A HREF="mailto:opendx2-cvs%40lists.berlios.de?Subject=Re%3A%20%5BOpenDX2-cvs%5D%20dxsamples/supervise/complexdemo/interactors%0A%09module_make.in%2C%201.1%2C%201.2&In-Reply-To=%3C20071024052632.78D6D1103A4%40mail.berlios.de%3E"
+       TITLE="[OpenDX2-cvs] dxsamples/supervise/complexdemo/interactors	module_make.in, 1.1, 1.2">nobody at sheep.berlios.de
+       </A><BR>
+    <I>Wed Oct 24 07:26:32 CEST 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000004.html">[OpenDX2-cvs] dx acinclude.m4,1.84,1.85
+</A></li>
+        <LI>Next message: <A HREF="000006.html">[OpenDX2-cvs] dxsamples/supervise/simpledemo/interactors	module_make.in, 1.1, 1.2
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#5">[ date ]</a>
+              <a href="thread.html#5">[ thread ]</a>
+              <a href="subject.html#5">[ subject ]</a>
+              <a href="author.html#5">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Update of /cvsroot/opendx2/dxsamples/supervise/complexdemo/interactors
+In directory sheep:/tmp/cvs-serv26879/complexdemo/interactors
+
+Modified Files:
+	module_make.in 
+Log Message:
+Updates to fix compiling interactors.
+
+
+
+Index: module_make.in
+===================================================================
+RCS file: /cvsroot/opendx2/dxsamples/supervise/complexdemo/interactors/module_make.in,v
+retrieving revision 1.1
+retrieving revision 1.2
+diff -C2 -d -r1.1 -r1.2
+*** module_make.in	1 Feb 2000 20:33:36 -0000	1.1
+--- module_make.in	24 Oct 2007 05:25:44 -0000	1.2
+***************
+*** 11,14 ****
+--- 11,17 ----
+  CC = $(DXCC)
+  
++ LIBS	= -L$(BASE)/<A HREF="https://lists.berlios.de/mailman/listinfo/opendx2-cvs">lib_ at DXARCH</A>@ -lm -lDX -lGL \
++ 		$(DXEXECLINKLIBS)
++ 
+  .c.o: ; $(CC) -c $*.c $(DXABI) $(DX_RTL_CFLAGS) $(CFLAGS)
+  
+***************
+*** 20,25 ****
+  	
+  usual_interactors:
+! 	$(CCLD) $(DXABI) $(DX_RTL_LDFLAGS) -e DXEntry \
+! 		-o interactors interactors.o -lm
+  
+  aix_interactors:
+--- 23,28 ----
+  	
+  usual_interactors:
+! 	$(CC) -o interactors $(DXABI) $(DX_RTL_LDFLAGS) \
+! 		$(DX_RTL_DXENTRY) interactors.o $(LIBS)
+  
+  aix_interactors:
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000004.html">[OpenDX2-cvs] dx acinclude.m4,1.84,1.85
+</A></li>
+	<LI>Next message: <A HREF="000006.html">[OpenDX2-cvs] dxsamples/supervise/simpledemo/interactors	module_make.in, 1.1, 1.2
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#5">[ date ]</a>
+              <a href="thread.html#5">[ thread ]</a>
+              <a href="subject.html#5">[ subject ]</a>
+              <a href="author.html#5">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/opendx2-cvs">More information about the opendx2-cvs
+mailing list</a><br>
+</body></html>

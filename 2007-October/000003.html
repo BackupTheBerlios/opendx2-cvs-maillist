@@ -1,0 +1,186 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [OpenDX2-cvs] dxsamples/supervise/interactors module_make.in, 1.1,	1.2 myinteractors.c, 1.2, 1.3
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/opendx2-cvs/2007-October/index.html" >
+   <LINK REL="made" HREF="mailto:opendx2-cvs%40lists.berlios.de?Subject=Re%3A%20%5BOpenDX2-cvs%5D%20dxsamples/supervise/interactors%20module_make.in%2C%201.1%2C%0A%091.2%20myinteractors.c%2C%201.2%2C%201.3&In-Reply-To=%3C20071024051156.4A1E610E592%40mail.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000002.html">
+   <LINK REL="Next"  HREF="000004.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[OpenDX2-cvs] dxsamples/supervise/interactors module_make.in, 1.1,	1.2 myinteractors.c, 1.2, 1.3</H1>
+    <B>dthompsn</B> 
+    <A HREF="mailto:opendx2-cvs%40lists.berlios.de?Subject=Re%3A%20%5BOpenDX2-cvs%5D%20dxsamples/supervise/interactors%20module_make.in%2C%201.1%2C%0A%091.2%20myinteractors.c%2C%201.2%2C%201.3&In-Reply-To=%3C20071024051156.4A1E610E592%40mail.berlios.de%3E"
+       TITLE="[OpenDX2-cvs] dxsamples/supervise/interactors module_make.in, 1.1,	1.2 myinteractors.c, 1.2, 1.3">nobody at sheep.berlios.de
+       </A><BR>
+    <I>Wed Oct 24 07:11:56 CEST 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000002.html">[OpenDX2-cvs] dx/src/uipp/ui icon50.xpm,1.1,1.2
+</A></li>
+        <LI>Next message: <A HREF="000004.html">[OpenDX2-cvs] dx acinclude.m4,1.84,1.85
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3">[ date ]</a>
+              <a href="thread.html#3">[ thread ]</a>
+              <a href="subject.html#3">[ subject ]</a>
+              <a href="author.html#3">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Update of /cvsroot/opendx2/dxsamples/supervise/interactors
+In directory sheep:/tmp/cvs-serv30975
+
+Modified Files:
+	module_make.in myinteractors.c 
+Log Message:
+Fix this interactor to work as a runtime loadable interactor.
+Fix the makefile up to actually work.
+
+
+
+Index: module_make.in
+===================================================================
+RCS file: /cvsroot/opendx2/dxsamples/supervise/interactors/module_make.in,v
+retrieving revision 1.1
+retrieving revision 1.2
+diff -C2 -d -r1.1 -r1.2
+*** module_make.in	1 Feb 2000 20:33:37 -0000	1.1
+--- module_make.in	24 Oct 2007 05:11:06 -0000	1.2
+***************
+*** 11,16 ****
+  CC = $(DXCC)
+  	
+! LIBS       = -L$(BASE)/<A HREF="https://lists.berlios.de/mailman/listinfo/opendx2-cvs">lib_ at DXARCH</A>@ -lDX \
+! 			-lGL \
+  	            $(DXEXECLINKLIBS)
+  
+--- 11,15 ----
+  CC = $(DXCC)
+  	
+! LIBS       = -L$(BASE)/<A HREF="https://lists.berlios.de/mailman/listinfo/opendx2-cvs">lib_ at DXARCH</A>@ -lm -lDX -lGL \
+  	            $(DXEXECLINKLIBS)
+  
+***************
+*** 21,29 ****
+  myinteractors: myinteractors.o
+  	-rm myinteractors
+! 	$(MAKE) -f interactors_make loadable_interactors || $(MAKE) -f interactors_make loadable_aix_interactors || $(MAKE) -f unrtloadable_dxexec
+  	
+  loadable_interactors:
+! 	$(CCLD) $(DXABI) $(DX_RTL_LDFLAGS) -e DXEntry \
+! 		-o myinteractors myinteractors.o -lm
+  
+  loadable_aix_interactors:
+--- 20,28 ----
+  myinteractors: myinteractors.o
+  	-rm myinteractors
+! 	$(MAKE) -f module_make loadable_interactors || $(MAKE) -f module_make loadable_aix_interactors || $(MAKE) -f module_make unrtloadable_dxexec
+  	
+  loadable_interactors:
+! 	$(CC) -o myinteractors $(DXABI) $(DX_RTL_LDFLAGS) \
+! 		$(DX_RTL_DXENTRY) myinteractors.o $(LIBS)
+  
+  loadable_aix_interactors:
+***************
+*** 33,34 ****
+--- 32,35 ----
+  		$(CCLD) $(DXABI) $(LDLIBFLAGS) myinteractors.o $(LIBS) -o dxexec
+  
++ clean:
++ 	rm -f myinteractors myinteractors.o
+
+Index: myinteractors.c
+===================================================================
+RCS file: /cvsroot/opendx2/dxsamples/supervise/interactors/myinteractors.c,v
+retrieving revision 1.2
+retrieving revision 1.3
+diff -C2 -d -r1.2 -r1.3
+*** myinteractors.c	17 May 2006 14:38:25 -0000	1.2
+--- myinteractors.c	24 Oct 2007 05:11:06 -0000	1.3
+***************
+*** 47,50 ****
+--- 47,51 ----
+  static UserInteractor _userInteractionTable[N_USER_INTERACTORS];
+  
++ #if defined(UNRTLOADABLE)
+  int
+  DXDefaultUserInteractors(int *n, void *t)
+***************
+*** 78,82 ****
+      return 1;
+  }
+!      
+  /***** Rotate *****/
+  
+--- 79,116 ----
+      return 1;
+  }
+! #else
+! int
+! DXEntry(int *n, void *t)
+! {
+!     _userInteractionTable[0].InitMode      = RotateInitMode;
+!     _userInteractionTable[0].EndMode       = RotateEndMode;
+!     _userInteractionTable[0].SetCamera     = RotateSetCamera;
+!     _userInteractionTable[0].GetCamera     = RotateGetCamera;
+!     _userInteractionTable[0].SetRenderable = RotateSetRenderable;
+!     _userInteractionTable[0].GetRenderable = RotateGetRenderable;
+!     _userInteractionTable[0].EventHandler  = RotateEventHandler;
+! 
+!     _userInteractionTable[1].InitMode      = PanInitMode;
+!     _userInteractionTable[1].EndMode       = PanEndMode;
+!     _userInteractionTable[1].SetCamera     = PanSetCamera;
+!     _userInteractionTable[1].GetCamera     = PanGetCamera;
+!     _userInteractionTable[1].SetRenderable = PanSetRenderable;
+!     _userInteractionTable[1].GetRenderable = PanGetRenderable;
+!     _userInteractionTable[1].EventHandler  = PanEventHandler;
+! 
+!     _userInteractionTable[2].InitMode      = ZoomInitMode;
+!     _userInteractionTable[2].EndMode       = ZoomEndMode;
+!     _userInteractionTable[2].SetCamera     = ZoomSetCamera;
+!     _userInteractionTable[2].GetCamera     = ZoomGetCamera;
+!     _userInteractionTable[2].SetRenderable = ZoomSetRenderable;
+!     _userInteractionTable[2].GetRenderable = ZoomGetRenderable;
+!     _userInteractionTable[2].EventHandler  = ZoomEventHandler;
+! 
+!     *n = N_USER_INTERACTORS;
+!     *(long **)t = (long *)_userInteractionTable;
+!     return 1;
+! }
+! #endif
+! 
+  /***** Rotate *****/
+  
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000002.html">[OpenDX2-cvs] dx/src/uipp/ui icon50.xpm,1.1,1.2
+</A></li>
+	<LI>Next message: <A HREF="000004.html">[OpenDX2-cvs] dx acinclude.m4,1.84,1.85
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#3">[ date ]</a>
+              <a href="thread.html#3">[ thread ]</a>
+              <a href="subject.html#3">[ subject ]</a>
+              <a href="author.html#3">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/opendx2-cvs">More information about the opendx2-cvs
+mailing list</a><br>
+</body></html>
